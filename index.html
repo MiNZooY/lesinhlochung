@@ -54,36 +54,34 @@
 
 <script>
     // BẠN NHỚ DÁN LẠI LINK WEB APP MỚI NHẤT VÀO ĐÂY NHÉ
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxRN_C_0M9VTgmxDP5IkLDS4wZJoA50J5QtKOS-4awLrnRcUbCMopqcRx4eoSUfmQ/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmeANO75piorh8XwpPquoRDHKRIgGILRgoiPHynBYFjUTVQrq65-ydBkwAEM2eYa2R/exec";
     
     let currentId = "";
     let mySelections = [];
 
     async function handleLogin() {
         const id = document.getElementById('idInput').value.trim().toLowerCase();
-        if(!id) return alert("Em nhớ nhập mã ID nhé!");
+        if(!id) return alert("Nhập ID đi ông bạn ơi!");
 
         showLoading(true);
         try {
-            // Kiểm tra ID hợp lệ
-            const resIds = await fetch(`${WEB_APP_URL}?action=getIds`);
-            const validIds = await resIds.json();
+            // Chỉ gọi 1 lần duy nhất!
+            const response = await fetch(`${WEB_APP_URL}?action=login&id=${id}`);
+            const result = await response.json();
 
-            if (validIds.includes(id)) {
-                currentId = id;
-                // Lấy lịch đã chọn trước đó (nếu có)
-                const resOld = await fetch(`${WEB_APP_URL}?action=getSelections&id=${id}`);
-                mySelections = await resOld.json();
+            if (result.success) {
+                currentId = result.id;
+                mySelections = result.selections; // Lịch cũ đã có sẵn ở đây
 
                 document.getElementById('loginBox').classList.add('d-none');
                 document.getElementById('mainBox').classList.remove('d-none');
-                document.getElementById('welcomeMsg').innerText = "ID Lễ Sinh: " + id;
+                document.getElementById('welcomeMsg').innerText = "Chào " + result.name + " (" + result.id + ")";
                 renderCalendar();
             } else {
-                alert("ID không có trong danh sách! Em hãy kiểm tra lại nhé.");
+                alert(result.message);
             }
         } catch(e) {
-            alert("Lỗi kết nối với máy chủ!");
+            alert("Server đang bận, thử lại sau nhé!");
         } finally {
             showLoading(false);
         }
