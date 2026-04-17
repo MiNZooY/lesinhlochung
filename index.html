@@ -4,50 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Ký Lịch Lễ Sinh</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; padding-bottom: 100px; }
-        .card { border-radius: 12px; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .day-card { border-left: 5px solid #0d6efd; margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; }
-        .shift-btn { margin: 4px; min-width: 80px; transition: all 0.2s; }
-        .selected { background-color: #198754 !important; color: white !important; border-color: #198754 !important; font-weight: bold; }
-        #loading { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
+        #loading { 
+            display: none; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(255,255,255,0.9); z-index: 9999; 
+            justify-content: center; align-items: center; flex-direction: column; 
+        }
     </style>
 </head>
 <body>
 
 <div id="loading">
-    <div class="spinner-border text-primary"></div>
-    <div class="mt-2 fw-bold text-primary">Đang xử lý...</div>
+    <div class="spinner-border" style="color: var(--church-blue);"></div>
+    <div class="mt-2 fw-bold" style="color: var(--church-blue);">Đang kết nối hệ thống...</div>
 </div>
 
 <div class="container py-4">
     <div id="loginBox" class="mx-auto" style="max-width: 400px; margin-top: 15vh;">
-        <div class="card p-4 text-center">
-            <h4 class="fw-bold mb-3">ĐĂNG NHẬP</h4>
-            <input type="text" id="idInput" class="form-control mb-3 text-center" placeholder="Nhập ID...">
-            <button onclick="handleLogin()" id="btnLogin" class="btn btn-primary w-100 fw-bold">Vào Chọn Lịch</button>
+        <div class="church-card text-center p-4">
+            <h4 class="fw-bold mb-4" style="color: var(--church-blue);">ĐĂNG KÝ CA TRỰC</h4>
+            <input type="text" id="idInput" class="form-control mb-4 text-center form-control-lg" placeholder="Nhập ID của em...">
+            <button onclick="handleLogin()" id="btnLogin" class="btn btn-submit-main w-100">Bắt Đầu Chọn Lịch</button>
         </div>
     </div>
 
     <div id="mainBox" class="d-none mx-auto" style="max-width: 600px;">
-        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-white rounded shadow-sm">
-            <h5 id="welcomeMsg" class="mb-0 text-primary fw-bold"></h5>
-            <button onclick="location.reload()" class="btn btn-outline-danger btn-sm">Thoát</button>
+        <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded shadow-sm" style="background: var(--white); border-left: 5px solid var(--church-gold);">
+            <h5 id="welcomeMsg" class="mb-0 fw-bold" style="color: var(--church-blue);"></h5>
+            <button onclick="location.reload()" class="btn btn-outline-danger btn-sm rounded-pill px-3">Thoát</button>
         </div>
 
-        <div id="calendarArea"></div>
+        <div id="calendarArea" style="padding-bottom: 20px;"></div>
 
-        <div class="fixed-bottom bg-white p-3 border-top shadow">
-            <div class="container" style="max-width: 600px;">
-                <button onclick="submitData()" class="btn btn-success w-100 fw-bold py-2">XÁC NHẬN & GỬI LỊCH</button>
+        <div class="fixed-bottom p-3" style="background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);">
+            <div class="container text-center" style="max-width: 600px;">
+                <button onclick="submitData()" class="btn btn-submit-main w-auto py-2 px-5 shadow-sm">
+                    Xác nhận & Gửi lịch
+                </button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // DÁN LINK WEB APP CỦA BẠN VÀO ĐÂY
+    // BẠN NHỚ DÁN LẠI LINK WEB APP MỚI NHẤT VÀO ĐÂY NHÉ
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxRN_C_0M9VTgmxDP5IkLDS4wZJoA50J5QtKOS-4awLrnRcUbCMopqcRx4eoSUfmQ/exec";
     
     let currentId = "";
@@ -55,7 +61,7 @@
 
     async function handleLogin() {
         const id = document.getElementById('idInput').value.trim().toLowerCase();
-        if(!id) return alert("Vui lòng nhập ID!");
+        if(!id) return alert("Em nhớ nhập mã ID nhé!");
 
         showLoading(true);
         try {
@@ -65,19 +71,19 @@
 
             if (validIds.includes(id)) {
                 currentId = id;
-                // Lấy lịch đã chọn trước đó
+                // Lấy lịch đã chọn trước đó (nếu có)
                 const resOld = await fetch(`${WEB_APP_URL}?action=getSelections&id=${id}`);
                 mySelections = await resOld.json();
 
                 document.getElementById('loginBox').classList.add('d-none');
                 document.getElementById('mainBox').classList.remove('d-none');
-                document.getElementById('welcomeMsg').innerText = "ID: " + id;
+                document.getElementById('welcomeMsg').innerText = "ID Lễ Sinh: " + id;
                 renderCalendar();
             } else {
-                alert("ID không tồn tại!");
+                alert("ID không có trong danh sách! Em hãy kiểm tra lại nhé.");
             }
         } catch(e) {
-            alert("Lỗi kết nối!");
+            alert("Lỗi kết nối với máy chủ!");
         } finally {
             showLoading(false);
         }
@@ -90,15 +96,19 @@
 
         days.forEach(d => {
             const shifts = (d === "Chúa Nhật") ? ["5g", "7g", "16g", "17g30"] : ["Sáng", "Chiều"];
+            
+            // Tạo các nút chọn ca
             let buttons = shifts.map(s => {
                 const isSelected = mySelections.some(x => x.day.trim() === d.trim() && x.shift.trim() === s.trim());
-                return `<button class="btn btn-outline-primary shift-btn btn-sm ${isSelected ? 'selected' : ''}" 
+                // Chú ý class được đổi thành 'shift-btn' để ăn theo file CSS
+                return `<button class="btn shift-btn ${isSelected ? 'selected' : ''}" 
                                 onclick="toggleShift('${d}', '${s}', this)">${s}</button>`;
             }).join('');
 
+            // Đổ dữ liệu ra khung HTML
             area.innerHTML += `
-                <div class="day-card">
-                    <div class="fw-bold mb-2">${d}</div>
+                <div class="church-card">
+                    <div class="day-title">${d}</div>
                     <div class="d-flex flex-wrap">${buttons}</div>
                 </div>`;
         });
@@ -110,9 +120,11 @@
         const idx = mySelections.findIndex(x => x.day.trim() === d && x.shift.trim() === s);
         
         if (idx > -1) {
+            // Bỏ chọn
             mySelections.splice(idx, 1);
             btn.classList.remove('selected');
         } else {
+            // Chọn
             mySelections.push({ day: d, shift: s });
             btn.classList.add('selected');
         }
@@ -120,20 +132,20 @@
 
     async function submitData() {
         const finalSelections = mySelections.filter(x => x.day && x.shift);
-        if(finalSelections.length === 0) return alert("Vui lòng chọn ít nhất 1 ca!");
-        if(!confirm(`Xác nhận gửi ${finalSelections.length} ca?`)) return;
+        if(finalSelections.length === 0) return alert("Em vui lòng chọn ít nhất 1 ca trực nhé!");
+        if(!confirm(`Xác nhận đăng ký ${finalSelections.length} ca trực? Dữ liệu cũ của em sẽ được làm mới.`)) return;
 
         showLoading(true);
         try {
             await fetch(WEB_APP_URL, {
                 method: "POST",
-                mode: "no-cors",
+                mode: "no-cors", // Bắt buộc cho Google Apps Script
                 body: JSON.stringify({ id: currentId, registrations: finalSelections })
             });
-            alert("Cập nhật lịch thành công!");
+            alert("Đã gửi thành công! Lịch của em đã được cập nhật.");
             location.reload();
         } catch(e) {
-            alert("Lỗi khi gửi dữ liệu!");
+            alert("Có lỗi xảy ra khi gửi dữ liệu!");
         } finally {
             showLoading(false);
         }
