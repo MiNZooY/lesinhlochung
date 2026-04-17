@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký Lịch Lễ Sinh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; padding-bottom: 100px; }
+        .card { border-radius: 12px; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .day-card { border-left: 5px solid #0d6efd; margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; }
+        .shift-btn { margin: 4px; min-width: 80px; transition: all 0.2s; }
+        .selected { background-color: #198754 !important; color: white !important; border-color: #198754 !important; font-weight: bold; }
+        #loading { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; }
+    </style>
+</head>
+<body>
+
+<div id="loading">
+    <div class="spinner-border text-primary"></div>
+    <div class="mt-2 fw-bold text-primary">Đang xử lý...</div>
+</div>
+
+<div class="container py-4">
+    <div id="loginBox" class="mx-auto" style="max-width: 400px; margin-top: 15vh;">
+        <div class="card p-4 text-center">
+            <h4 class="fw-bold mb-3">ĐĂNG NHẬP</h4>
+            <input type="text" id="idInput" class="form-control mb-3 text-center" placeholder="Nhập ID...">
+            <button onclick="handleLogin()" id="btnLogin" class="btn btn-primary w-100 fw-bold">Vào Chọn Lịch</button>
+        </div>
+    </div>
+
+    <div id="mainBox" class="d-none mx-auto" style="max-width: 600px;">
+        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-white rounded shadow-sm">
+            <h5 id="welcomeMsg" class="mb-0 text-primary fw-bold"></h5>
+            <button onclick="location.reload()" class="btn btn-outline-danger btn-sm">Thoát</button>
+        </div>
+
+        <div id="calendarArea"></div>
+
+        <div class="fixed-bottom bg-white p-3 border-top shadow">
+            <div class="container" style="max-width: 600px;">
+                <button onclick="submitData()" class="btn btn-success w-100 fw-bold py-2">XÁC NHẬN & GỬI LỊCH</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // DÁN LINK WEB APP CỦA BẠN VÀO ĐÂY
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxRN_C_0M9VTgmxDP5IkLDS4wZJoA50J5QtKOS-4awLrnRcUbCMopqcRx4eoSUfmQ/exec";
+    
+    let currentId = "";
+    let mySelections = [];
+
+    async function handleLogin() {
+        const id = document.getElementById('idInput').value.trim().toLowerCase();
+        if(!id) return alert("Vui lòng nhập ID!");
+
+        showLoading(true);
+        try {
+            // Kiểm tra ID hợp lệ
+            const resIds = await fetch(`${WEB_APP_URL}?action=getIds`);
+            const validIds = await resIds.json();
+
+            if (validIds.includes(id)) {
+                currentId = id;
+                // Lấy lịch đã chọn trước đó
+                const resOld = await fetch(`${WEB_APP_URL}?action=getSelections&id=${id}`);
+                mySelections = await resOld.json();
+
+                document.getElementById('loginBox').classList.add('d-none');
+                document.getElementById('mainBox').classList.remove('d-none');
+                document.getElementById('welcomeMsg').innerText = "ID: " + id;
+                renderCalendar();
+            } else {
+                alert("ID không tồn tại!");
+            }
+        } catch(e) {
+            alert("Lỗi kết nối!");
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    function renderCalendar() {
+        const days = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chúa Nhật"];
+        const area = document.getElementById('calendarArea');
+        area.innerHTML = "";
+
+        days.forEach(d => {
+            const shifts = (d === "Chúa Nhật") ? ["5g", "7g", "16g", "17g30"] : ["Sáng", "Chiều"];
+            let buttons = shifts.map(s => {
+                const isSelected = mySelections.some(x => x.day.trim() === d.trim() && x.shift.trim() === s.trim());
+                return `<button class="btn btn-outline-primary shift-btn btn-sm ${isSelected ? 'selected' : ''}" 
+                                onclick="toggleShift('${d}', '${s}', this)">${s}</button>`;
+            }).join('');
+
+            area.innerHTML += `
+                <div class="day-card">
+                    <div class="fw-bold mb-2">${d}</div>
+                    <div class="d-flex flex-wrap">${buttons}</div>
+                </div>`;
+        });
+    }
+
+    function toggleShift(day, shift, btn) {
+        const d = day.trim();
+        const s = shift.trim();
+        const idx = mySelections.findIndex(x => x.day.trim() === d && x.shift.trim() === s);
+        
+        if (idx > -1) {
+            mySelections.splice(idx, 1);
+            btn.classList.remove('selected');
+        } else {
+            mySelections.push({ day: d, shift: s });
+            btn.classList.add('selected');
+        }
+    }
+
+    async function submitData() {
+        const finalSelections = mySelections.filter(x => x.day && x.shift);
+        if(finalSelections.length === 0) return alert("Vui lòng chọn ít nhất 1 ca!");
+        if(!confirm(`Xác nhận gửi ${finalSelections.length} ca?`)) return;
+
+        showLoading(true);
+        try {
+            await fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                body: JSON.stringify({ id: currentId, registrations: finalSelections })
+            });
+            alert("Cập nhật lịch thành công!");
+            location.reload();
+        } catch(e) {
+            alert("Lỗi khi gửi dữ liệu!");
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    function showLoading(s) { document.getElementById('loading').style.display = s ? 'flex' : 'none'; }
+</script>
+</body>
+</html>
