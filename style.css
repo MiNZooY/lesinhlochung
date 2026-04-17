@@ -1,0 +1,88 @@
+/* style.css - Chủ đề Lễ Sinh / Công Giáo */
+
+:root {
+    --church-blue: #0056b3;      /* Xanh truyền thống */
+    --church-gold: #ffc107;      /* Vàng đồng phụng vụ */
+    --light-bg: #f4f7f6;         /* Nền nhạt trang nhã */
+    --white: #ffffff;
+    --shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+body {
+    background-color: var(--light-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Card chứa nội dung */
+.church-card {
+    background: var(--white);
+    border-radius: 15px;
+    border: none;
+    box-shadow: var(--shadow);
+    border-top: 5px solid var(--church-blue); /* Điểm nhấn màu xanh */
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+/* Các nút bấm ca trực */
+.shift-btn {
+    margin: 5px;
+    min-width: 90px;
+    border-radius: 20px !important;
+    border: 2px solid var(--church-blue) !important;
+    color: var(--church-blue) !important;
+    background: transparent;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.shift-btn:hover {
+    background: var(--church-blue) !important;
+    color: var(--white) !important;
+}
+
+/* Trạng thái đã chọn (Màu vàng đồng) */
+.shift-btn.selected {
+    background-color: var(--church-gold) !important;
+    border-color: var(--church-gold) !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
+/* Tiêu đề các ngày trong tuần */
+.day-title {
+    color: var(--church-blue);
+    font-weight: bold;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.day-title::before {
+    content: "♰"; /* Biểu tượng Thánh Giá nhỏ */
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* Nút gửi chính */
+.btn-submit-main {
+    background: var(--church-blue);
+    color: white;
+    border-radius: 25px; /* Bo tròn vừa phải */
+    padding: 10px 40px;  /* Khoảng cách trên-dưới và trái-phải */
+    font-weight: 600;
+    text-transform: none; /* Bỏ viết hoa toàn bộ để nhìn nhẹ nhàng hơn */
+    letter-spacing: 0.5px;
+    border: none;
+    transition: all 0.2s ease;
+    font-size: 0.95rem; /* Giảm size chữ xuống một xíu */
+}
+
+.btn-submit-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4);
+}
