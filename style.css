@@ -1,88 +1,241 @@
-/* style.css - Chủ đề Lễ Sinh / Công Giáo */
-
+/* =========================================
+   BỘ BIẾN MÀU SẮC & THIẾT LẬP CHUNG
+   ========================================= */
 :root {
-    --church-blue: #0056b3;      /* Xanh truyền thống */
-    --church-gold: #ffc107;      /* Vàng đồng phụng vụ */
-    --light-bg: #f4f7f6;         /* Nền nhạt trang nhã */
-    --white: #ffffff;
-    --shadow: 0 4px 15px rgba(0,0,0,0.05);
+    --n-black: #111111;
+    --n-white: #ffffff;
+    --n-bg: #f4f1ea;       
+    --n-blue: #0047ab;     
+    --n-gold: #ffc107;     
+    --n-red: #d32f2f;
+    
+    --brutal-border: 3px solid var(--n-black);
+    --brutal-shadow: 5px 5px 0px var(--n-black);
+    --brutal-shadow-sm: 3px 3px 0px var(--n-black);
+    --brutal-shadow-hover: 0px 0px 0px var(--n-black);
+    
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
 }
 
 body {
-    background-color: var(--light-bg);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-    line-height: 1.6;
+    background-color: var(--n-bg);
+    color: var(--n-black);
+    font-family: 'Space Grotesk', sans-serif;
+    padding-bottom: 100px;
 }
 
-/* Card chứa nội dung */
-.church-card {
-    background: var(--white);
-    border-radius: 15px;
-    border: none;
-    box-shadow: var(--shadow);
-    border-top: 5px solid var(--church-blue); /* Điểm nhấn màu xanh */
-    margin-bottom: 20px;
+/* =========================================
+   CÁC KHỐI UI DÙNG CHUNG (CARD, NÚT, TIÊU ĐỀ)
+   ========================================= */
+.brutal-card {
+    background: var(--n-white);
+    border: var(--brutal-border);
+    box-shadow: var(--brutal-shadow);
     padding: 20px;
+    border-radius: var(--radius-lg);
 }
 
-/* Các nút bấm ca trực */
+.brutal-btn {
+    background: var(--n-gold); /* Mặc định nút màu vàng */
+    color: var(--n-black);
+    border: var(--brutal-border);
+    box-shadow: var(--brutal-shadow-sm);
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    transition: all 0.15s ease;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+}
+.brutal-btn:hover {
+    transform: translate(3px, 3px);
+    box-shadow: var(--brutal-shadow-hover);
+    color: var(--n-black);
+}
+
+/* Biến thể của nút bấm */
+.brutal-btn-blue { background: var(--n-blue); color: var(--n-white); }
+.brutal-btn-blue:hover { color: var(--n-white); }
+.brutal-btn-danger { background: var(--n-red); color: var(--n-white); padding: 8px 16px; font-size: 0.95rem; }
+.brutal-btn-danger:hover { color: var(--n-white); }
+.brutal-btn-white { background: var(--n-white); color: var(--n-black); }
+
+.day-title-box {
+    background: var(--n-black);
+    color: var(--n-white);
+    padding: 10px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+    border-bottom: var(--brutal-border);
+    border-radius: 13px 13px 0 0; 
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.name-tag {
+    background: var(--n-gold);
+    border: 2px solid var(--n-black);
+    font-weight: 800;
+    padding: 6px 12px;
+    margin: 4px 6px 4px 0;
+    display: inline-block;
+    box-shadow: 2px 2px 0px var(--n-black);
+    font-size: 1.15rem;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.3px;
+}
+
+/* =========================================
+   HIỆU ỨNG LOADING CHUNG
+   ========================================= */
+#brutal-loader {
+    display: none; 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--n-bg); z-index: 9999;
+    justify-content: center; align-items: center; flex-direction: column;
+}
+.spinner {
+    width: 60px; height: 60px;
+    border: 6px solid var(--n-black);
+    border-top-color: var(--n-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* =========================================
+   DÀNH RIÊNG CHO TRANG ĐĂNG KÝ (INDEX)
+   ========================================= */
+.brutal-input {
+    border: var(--brutal-border);
+    border-radius: var(--radius-md);
+    padding: 15px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    box-shadow: inset 3px 3px 0px rgba(0,0,0,0.05);
+    width: 100%;
+    text-align: center;
+    outline: none;
+    text-transform: uppercase;
+}
+.brutal-input:focus {
+    box-shadow: inset 3px 3px 0px rgba(0,0,0,0.1), 0 0 0 3px var(--n-gold);
+}
+
 .shift-btn {
-    margin: 5px;
+    background: var(--n-white);
+    border: 2px solid var(--n-black);
+    font-weight: 700;
+    padding: 10px 15px;
+    border-radius: var(--radius-sm);
+    box-shadow: 3px 3px 0px var(--n-black);
+    transition: all 0.1s ease;
+    cursor: pointer;
+    font-size: 1.1rem;
     min-width: 90px;
-    border-radius: 20px !important;
-    border: 2px solid var(--church-blue) !important;
-    color: var(--church-blue) !important;
-    background: transparent;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    text-align: center;
 }
-
 .shift-btn:hover {
-    background: var(--church-blue) !important;
-    color: var(--white) !important;
+    background: #f0f0f0;
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px var(--n-black);
 }
-
-/* Trạng thái đã chọn (Màu vàng đồng) */
 .shift-btn.selected {
-    background-color: var(--church-gold) !important;
-    border-color: var(--church-gold) !important;
-    color: #000 !important;
-    box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+    background: var(--n-gold);
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px var(--n-black);
 }
 
-/* Tiêu đề các ngày trong tuần */
-.day-title {
-    color: var(--church-blue);
-    font-weight: bold;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 8px;
-    margin-bottom: 15px;
+.submit-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--n-white);
+    border: var(--brutal-border);
+    border-radius: var(--radius-lg);
+    padding: 15px 25px;
+    box-shadow: var(--brutal-shadow);
+    z-index: 1000;
     display: flex;
+    gap: 15px;
+    align-items: center;
+    width: 90%;
+    max-width: 500px;
+    justify-content: space-between;
+}
+
+/* =========================================
+   DÀNH RIÊNG CHO TRANG ADMIN
+   ========================================= */
+.brutal-tabs {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 30px;
+    border-bottom: var(--brutal-border);
+    padding-bottom: 15px;
+}
+.tab-btn {
+    background: var(--n-white);
+    font-size: 1.05rem;
+}
+.tab-btn.active {
+    background: var(--n-black);
+    color: var(--n-gold);
+    transform: translate(3px, 3px);
+    box-shadow: var(--brutal-shadow-hover);
+}
+
+.shift-block {
+    border: 2px dashed var(--n-black);
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    background: #fdfdfd;
+    border-radius: var(--radius-md);
+}
+.shift-block:last-child { margin-bottom: 0; }
+
+.shift-header {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    color: var(--n-blue);
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
-.day-title::before {
-    content: "♰"; /* Biểu tượng Thánh Giá nhỏ */
-    margin-right: 10px;
-    font-size: 1.2rem;
+.user-list-item {
+    border: var(--brutal-border);
+    border-bottom: none;
+    padding: 12px 16px;
+    background: var(--n-white);
+    cursor: pointer;
+    transition: all 0.1s;
 }
-
-/* Nút gửi chính */
-.btn-submit-main {
-    background: var(--church-blue);
-    color: white;
-    border-radius: 25px; /* Bo tròn vừa phải */
-    padding: 10px 40px;  /* Khoảng cách trên-dưới và trái-phải */
-    font-weight: 600;
-    text-transform: none; /* Bỏ viết hoa toàn bộ để nhìn nhẹ nhàng hơn */
-    letter-spacing: 0.5px;
-    border: none;
-    transition: all 0.2s ease;
-    font-size: 0.95rem; /* Giảm size chữ xuống một xíu */
+.user-list-item:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.user-list-item:last-child { 
+    border-bottom: var(--brutal-border);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
+.user-list-item:hover { background: var(--n-gold); }
 
-.btn-submit-main:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4);
+.user-name-list { font-size: 1.2rem; font-weight: 800; }
+
+.future-zone {
+    background: repeating-linear-gradient(45deg, #fff3cd, #fff3cd 10px, #ffecb3 10px, #ffecb3 20px);
+    border: var(--brutal-border);
+    padding: 16px;
+    margin-top: 25px;
+    border-radius: var(--radius-md);
 }
