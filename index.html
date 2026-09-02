@@ -3,88 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Ký Lịch Lễ Sinh</title>
+    <title>Lễ Sinh Lộc Hưng</title>
+    <!-- Icon ☧ màu xanh trên tab trình duyệt -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%230047ab'>☧</text></svg>">
+    
+    <!-- Hiển thị đẹp khi gửi link qua Zalo / Facebook -->
+    <meta property="og:title" content="Đăng Ký Lịch Phụng Vụ - Lễ Sinh Lộc Hưng">
+    <meta property="og:description" content="Hệ thống đăng ký ca trực và xem lịch phụng vụ chính thức.">
+    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Chi_Rho.svg/512px-Chi_Rho.svg.png">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
-    <style>
-        #loading { 
-            display: none; 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(255,255,255,0.9); z-index: 9999; 
-            justify-content: center; align-items: center; flex-direction: column; 
-        }
-    </style>
 </head>
 <body>
 
-<div id="loading">
-    <div class="spinner-border" style="color: var(--church-blue);"></div>
-    <div class="mt-2 fw-bold" style="color: var(--church-blue);">Đang kết nối hệ thống...</div>
+<div id="brutal-loader">
+    <div class="spinner"></div>
+    <h2 class="fw-bold m-0" style="color: var(--n-black); text-shadow: 2px 2px 0px var(--n-gold);">ĐANG KẾT NỐI...</h2>
 </div>
 
 <div class="container py-4">
-    <div id="loginBox" class="mx-auto" style="max-width: 400px; margin-top: 15vh;">
-        <div class="church-card text-center p-4">
-            <h4 class="fw-bold mb-4" style="color: var(--church-blue);">ĐĂNG KÝ CA TRỰC</h4>
-            <input type="text" id="idInput" class="form-control mb-4 text-center form-control-lg" placeholder="Nhập ID của em...">
-            <button onclick="handleLogin()" id="btnLogin" class="btn btn-submit-main w-100">Bắt Đầu Chọn Lịch</button>
+    <div id="loginBox" class="mx-auto" style="max-width: 450px; margin-top: 10vh;">
+        <div class="brutal-card text-center text-uppercase">
+            <h1 class="fw-bold mb-1 text-primary" style="font-weight: 800!important; font-size: 2.5rem; text-shadow: 2px 2px 0px var(--n-black); color: var(--n-blue)!important;">☧</h1>
+            <h3 class="fw-bold mb-4" style="color: var(--n-black);">ĐĂNG KÝ LỊCH LỄ</h3>
+            <input type="text" id="idInput" class="brutal-input mb-4" placeholder="NHẬP MÃ ID CỦA EM" autocomplete="off">
+            <button onclick="handleLogin()" id="btnLogin" class="brutal-btn w-100">BẮT ĐẦU ⚡</button>
         </div>
     </div>
 
-    <div id="mainBox" class="d-none mx-auto" style="max-width: 600px;">
-        <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded shadow-sm" style="background: var(--white); border-left: 5px solid var(--church-gold);">
-            <h5 id="welcomeMsg" class="mb-0 fw-bold" style="color: var(--church-blue);"></h5>
-            <button onclick="location.reload()" class="btn btn-outline-danger btn-sm rounded-pill px-3">Thoát</button>
+    <div id="mainBox" class="d-none mx-auto" style="max-width: 900px;">
+        <div class="brutal-card d-flex justify-content-between align-items-center mb-4 p-3 border-3" style="background: var(--n-gold);">
+            <div><h4 id="welcomeMsg" class="mb-0 fw-bold text-uppercase" style="color: var(--n-black);"></h4></div>
+            <button onclick="location.reload()" class="brutal-btn brutal-btn-danger">ĐĂNG XUẤT</button>
         </div>
 
-        <div id="calendarArea" style="padding-bottom: 20px;"></div>
+        <div class="brutal-tabs">
+            <button class="brutal-btn tab-btn active" id="btn-tab-reg" onclick="switchTabUser('reg')">✍️ ĐĂNG KÝ CA TRỰC</button>
+            <button class="brutal-btn tab-btn" id="btn-tab-official" onclick="switchTabUser('official')">📅 LỊCH CHÍNH THỨC</button>
+            <button class="brutal-btn tab-btn" id="btn-tab-achieve" onclick="switchTabUser('achieve')" style="background: #e8f5e9;">⭐ THÀNH TÍCH</button>
+        </div>
 
-        <div class="fixed-bottom p-3" style="background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);">
-            <div class="container text-center" style="max-width: 600px;">
-                <button onclick="submitData()" class="btn btn-submit-main w-auto py-2 px-5 shadow-sm">
-                    Xác nhận & Gửi lịch
-                </button>
+        <div id="tab-reg">
+            <div id="calendarArea" class="row g-4"></div>
+            <div class="submit-bar">
+                <div class="fw-bold fs-5">
+                    Đã chọn: <span id="shiftCountDisplay" class="badge bg-dark border border-dark rounded-pill fs-5" style="border-radius: var(--radius-sm)!important;">0</span>
+                </div>
+                <button onclick="submitData()" class="brutal-btn brutal-btn-blue">GỬI LỊCH ✔️</button>
+            </div>
+        </div>
+
+        <div id="tab-official" style="display: none;">
+            <div class="row g-4" id="officialCalendarArea"></div>
+        </div>
+
+        <div id="tab-achieve" style="display: none;">
+            <div class="brutal-card mb-4" style="background: #e8f5e9;">
+                <h4 class="fw-bold text-success border-bottom border-success border-2 pb-2">TỔNG KẾT THÁNG NÀY</h4>
+                <div class="row text-center fw-bold mt-3">
+                    <div class="col-4 border-end border-dark border-2">
+                        <div class="fs-1 text-success" id="userScoreThuong">0</div>
+                        <div>THƯỞNG</div>
+                    </div>
+                    <div class="col-4 border-end border-dark border-2">
+                        <div class="fs-1 text-danger" id="userScorePhat">0</div>
+                        <div>PHẠT</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="fs-1 text-primary" id="userScoreBu">0</div>
+                        <div>BÙ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="brutal-card">
+                <h4 class="fw-bold border-bottom border-dark border-2 pb-2">LỊCH SỬ GHI NHẬN</h4>
+                <div id="userHistoryLog" class="mt-3"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // BẠN NHỚ DÁN LẠI LINK WEB APP MỚI NHẤT VÀO ĐÂY NHÉ
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzhSpnlE6zTVUyzVJ6nk-j3cw7QOnfYPDQNcrYdHpLwt6DC7y5nC7xzupwK6khsNHgs/exec";
+    // DÁN LINK WEB APP MỚI NHẤT VÀO ĐÂY
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxjDBfDB3RSGNjFlhRyJSzKZvtcu-LGia3r3Nz9FR6TWCucv582-JdHPtKcNs_oVK-i/exec";
     
     let currentId = "";
     let mySelections = [];
+    let officialData = []; 
+
+    document.getElementById("idInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") { event.preventDefault(); handleLogin(); }
+    });
+
+    function switchTabUser(tabName) {
+        document.getElementById('tab-reg').style.display = tabName === 'reg' ? 'block' : 'none';
+        document.getElementById('tab-official').style.display = tabName === 'official' ? 'block' : 'none';
+        document.getElementById('tab-achieve').style.display = tabName === 'achieve' ? 'block' : 'none';
+        
+        document.getElementById('btn-tab-reg').classList.toggle('active', tabName === 'reg');
+        document.getElementById('btn-tab-official').classList.toggle('active', tabName === 'official');
+        document.getElementById('btn-tab-achieve').classList.toggle('active', tabName === 'achieve');
+        
+        const submitBar = document.querySelector('.submit-bar');
+        if(submitBar) submitBar.style.display = tabName === 'reg' ? 'flex' : 'none';
+    }
 
     async function handleLogin() {
         const id = document.getElementById('idInput').value.trim().toLowerCase();
-        if(!id) return alert("Nhập ID đi ông bạn ơi!");
+        if(!id) return alert("HÃY NHẬP ID ĐỂ TIẾP TỤC!");
 
         showLoading(true);
         try {
-            // Chỉ gọi 1 lần duy nhất!
+            // Tối ưu Gộp API: Lấy Lịch Đăng Ký, Thành Tích, Lịch Chính Thức trong 1 lần
             const response = await fetch(`${WEB_APP_URL}?action=login&id=${id}`);
             const result = await response.json();
 
             if (result.success) {
                 currentId = result.id;
-                mySelections = result.selections; // Lịch cũ đã có sẵn ở đây
+                mySelections = result.selections || [];
+                officialData = result.officialData || []; 
 
                 document.getElementById('loginBox').classList.add('d-none');
                 document.getElementById('mainBox').classList.remove('d-none');
-                document.getElementById('welcomeMsg').innerText = "Chào " + result.name + " (" + result.id + ")";
+                document.getElementById('welcomeMsg').innerText = "✌️ CHÀO " + result.name;
+                
                 renderCalendar();
+                updateShiftCount();
+                renderAchieveData(result.thuongPhat);
+                renderOfficialCalendar();
             } else {
                 alert(result.message);
             }
         } catch(e) {
-            alert("Server đang bận, thử lại sau nhé!");
+            alert("SERVER ĐANG BẬN, THỬ LẠI SAU NHÉ!");
         } finally {
             showLoading(false);
         }
+    }
+
+    function renderAchieveData(tpData) {
+        if(!tpData) return;
+        document.getElementById('userScoreThuong').innerText = tpData.thuong;
+        document.getElementById('userScorePhat').innerText = tpData.phat;
+        document.getElementById('userScoreBu').innerText = tpData.bu;
+        
+        const historyBox = document.getElementById('userHistoryLog');
+        if(tpData.history.length === 0) {
+            historyBox.innerHTML = '<div class="text-muted fw-bold">Chưa có ghi nhận nào.</div>';
+            return;
+        }
+        
+        historyBox.innerHTML = tpData.history.map(item => {
+            let color = item.type === 'Thưởng' ? 'text-success' : (item.type === 'Phạt' ? 'text-danger' : 'text-primary');
+            return `<div class="p-3 border-bottom border-dark border-1 mb-2" style="background: var(--n-bg); border-radius: var(--radius-sm);">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong class="${color} text-uppercase fs-5">${item.type}</strong>
+                            <small class="text-muted fw-bold">${item.date}</small>
+                        </div>
+                        <div class="fw-bold fs-6">Lý do: ${item.note || 'Không có ghi chú'}</div>
+                    </div>`;
+        }).join('');
     }
 
     function renderCalendar() {
@@ -94,21 +175,57 @@
 
         days.forEach(d => {
             const shifts = (d === "Chúa Nhật") ? ["5g", "7g", "16g", "17g30"] : ["Sáng", "Chiều"];
-            
-            // Tạo các nút chọn ca
-            let buttons = shifts.map(s => {
+            let buttonsHtml = shifts.map(s => {
                 const isSelected = mySelections.some(x => x.day.trim() === d.trim() && x.shift.trim() === s.trim());
-                // Chú ý class được đổi thành 'shift-btn' để ăn theo file CSS
-                return `<button class="btn shift-btn ${isSelected ? 'selected' : ''}" 
-                                onclick="toggleShift('${d}', '${s}', this)">${s}</button>`;
+                return `<button class="shift-btn ${isSelected ? 'selected' : ''}" onclick="toggleShift('${d}', '${s}', this)">${s}</button>`;
             }).join('');
 
-            // Đổ dữ liệu ra khung HTML
             area.innerHTML += `
-                <div class="church-card">
-                    <div class="day-title">${d}</div>
-                    <div class="d-flex flex-wrap">${buttons}</div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="brutal-card p-0 h-100 d-flex flex-column">
+                        <div class="day-title-box">${d}</div>
+                        <div class="p-4 d-flex flex-wrap justify-content-center gap-3 flex-grow-1 align-items-center" style="background: #fdfdfd; border-radius: 0 0 var(--radius-lg) var(--radius-lg);">
+                            ${buttonsHtml}
+                        </div>
+                    </div>
                 </div>`;
+        });
+    }
+
+    function renderOfficialCalendar() {
+        const days = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chúa Nhật"];
+        const area = document.getElementById('officialCalendarArea');
+        area.innerHTML = "";
+
+        if (officialData.length === 0) {
+            area.innerHTML = `<div class="w-100 mt-4 text-center"><h4 class="fw-bold text-muted border border-dark p-4 brutal-card d-inline-block">Hiện chưa có lịch trực chính thức tuần này!</h4></div>`;
+            return;
+        }
+
+        days.forEach(d => {
+            const shifts = (d === "Chúa Nhật") ? ["5g", "7g", "16g", "17g30"] : ["Sáng", "Chiều"];
+            let html = `<div class="col-md-6 col-lg-4">
+                            <div class="brutal-card p-0 h-100 d-flex flex-column">
+                                <div class="day-title-box m-0" style="background: var(--n-blue);">${d}</div>
+                                <div class="px-3 pb-3 pt-3 flex-grow-1">`;
+            
+            shifts.forEach(s => {
+                let enrolledUsers = officialData.filter(item => item.day === d && item.shift === s);
+                html += `<div class="shift-block"><div class="shift-header text-dark"><span>${s}</span><span class="badge bg-dark border border-dark border-1 fs-6" style="border-radius: var(--radius-sm)">${enrolledUsers.length}</span></div><div>`;
+                
+                if(enrolledUsers.length === 0) {
+                    html += `<span class="text-muted fw-bold" style="font-size: 0.9rem;">-- Trống --</span>`;
+                } else {
+                    enrolledUsers.forEach(u => {
+                        const isMe = document.getElementById('welcomeMsg').innerText.includes(u.name.toUpperCase());
+                        const colorStyle = isMe ? 'background: var(--n-blue); color: white;' : '';
+                        html += `<span class="name-tag" style="${colorStyle}">${u.name}</span>`;
+                    });
+                }
+                html += `</div></div>`;
+            });
+            html += `</div></div></div>`;
+            area.innerHTML += html;
         });
     }
 
@@ -116,40 +233,30 @@
         const d = day.trim();
         const s = shift.trim();
         const idx = mySelections.findIndex(x => x.day.trim() === d && x.shift.trim() === s);
-        
-        if (idx > -1) {
-            // Bỏ chọn
-            mySelections.splice(idx, 1);
-            btn.classList.remove('selected');
-        } else {
-            // Chọn
-            mySelections.push({ day: d, shift: s });
-            btn.classList.add('selected');
-        }
+        if (idx > -1) { mySelections.splice(idx, 1); btn.classList.remove('selected'); } 
+        else { mySelections.push({ day: d, shift: s }); btn.classList.add('selected'); }
+        updateShiftCount();
     }
+
+    function updateShiftCount() { document.getElementById('shiftCountDisplay').innerText = mySelections.length; }
 
     async function submitData() {
         const finalSelections = mySelections.filter(x => x.day && x.shift);
-        if(finalSelections.length === 0) return alert("Em vui lòng chọn ít nhất 1 ca trực nhé!");
-        if(!confirm(`Xác nhận đăng ký ${finalSelections.length} ca trực? Dữ liệu cũ của em sẽ được làm mới.`)) return;
+        if(finalSelections.length === 0) return alert("EM CHƯA CHỌN CA TRỰC NÀO!");
+        if(!confirm(`XÁC NHẬN GỬI ${finalSelections.length} CA TRỰC?`)) return;
 
         showLoading(true);
         try {
             await fetch(WEB_APP_URL, {
-                method: "POST",
-                mode: "no-cors", // Bắt buộc cho Google Apps Script
+                method: "POST", mode: "no-cors",
                 body: JSON.stringify({ id: currentId, registrations: finalSelections })
             });
-            alert("Đã gửi thành công! Lịch của em đã được cập nhật.");
+            alert("THÀNH CÔNG! Lịch đã được ghi nhận.");
             location.reload();
-        } catch(e) {
-            alert("Có lỗi xảy ra khi gửi dữ liệu!");
-        } finally {
-            showLoading(false);
-        }
+        } catch(e) { alert("LỖI KẾT NỐI!"); } finally { showLoading(false); }
     }
 
-    function showLoading(s) { document.getElementById('loading').style.display = s ? 'flex' : 'none'; }
+    function showLoading(isShowing) { document.getElementById('brutal-loader').style.display = isShowing ? 'flex' : 'none'; }
 </script>
 </body>
 </html>
