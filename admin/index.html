@@ -6,10 +6,7 @@
     <title>Ban Điều Hành</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23d32f2f'>☧</text></svg>">
-    
     <meta property="og:title" content="Trang Quản Trị - Lễ Sinh Lộc Hưng">
-    <meta property="og:description" content="Khu vực dành riêng cho Ban Điều Hành.">
-    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Chi_Rho.svg/512px-Chi_Rho.svg.png">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -22,10 +19,7 @@
         .brutal-search { border: 2px solid var(--n-black); font-family: 'Space Grotesk', sans-serif; font-weight: 700; outline: none; border-radius: 4px; background: #fff; text-align: center; }
         .brutal-search:focus { box-shadow: inset 2px 2px 0px rgba(0,0,0,0.1); }
         
-        .poster-wrapper {
-            background: #ffffff; border: 4px solid var(--n-black); border-radius: var(--radius-lg); padding: 40px; box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.1);
-            background-image: radial-gradient(#cccccc 2px, transparent 2px); background-size: 25px 25px; 
-        }
+        .poster-wrapper { background: #ffffff; border: 4px solid var(--n-black); border-radius: var(--radius-lg); padding: 40px; box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.1); background-image: radial-gradient(#cccccc 2px, transparent 2px); background-size: 25px 25px; }
         .poster-day-title { font-weight: 800; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
         .poster-name-tag { display: flex; align-items: flex-start; background: #ffffff; border: 2px solid var(--n-black); padding: 8px 12px; border-radius: 8px; box-shadow: 3px 3px 0px var(--n-black); font-weight: 700; font-size: 1.15rem; line-height: 1.3; text-align: left; }
         .cross-icon { color: var(--n-gold); font-size: 1.3rem; margin-right: 8px; margin-top: -2px; text-shadow: 1px 1px 0px #000; }
@@ -38,9 +32,6 @@
     <h2 class="fw-bold m-0" style="color: var(--n-black); text-shadow: 2px 2px 0px var(--n-gold);">ĐANG TẢI DỮ LIỆU...</h2>
 </div>
 
-<!-- ========================================== -->
-<!-- MÀN HÌNH ĐĂNG NHẬP ADMIN -->
-<!-- ========================================== -->
 <div class="container py-4" id="adminLoginBox">
     <div class="mx-auto" style="max-width: 450px; margin-top: 10vh;">
         <div class="brutal-card text-center text-uppercase">
@@ -52,9 +43,6 @@
     </div>
 </div>
 
-<!-- ========================================== -->
-<!-- GIAO DIỆN QUẢN TRỊ (Bị ẩn lúc đầu) -->
-<!-- ========================================== -->
 <div class="container py-4 d-none" id="adminMainBox">
     <div class="brutal-card d-flex flex-wrap justify-content-between align-items-center mb-4" style="background: var(--n-blue); color: var(--n-white);">
         <h2 class="m-0 fw-bold">QUẢN TRỊ LỄ SINH</h2>
@@ -85,9 +73,7 @@
     </div>
 
     <div id="tab-poster" style="display: none;">
-        <div class="alert fw-bold mb-4" style="background: #fff3cd; border: var(--brutal-border);">
-            💡 Hướng dẫn: Cuộn sao cho toàn bộ bảng lọt vào màn hình, dùng công cụ chụp ảnh màn hình cắt phần viền xám để gửi nhóm.
-        </div>
+        <div class="alert fw-bold mb-4" style="background: #fff3cd; border: var(--brutal-border);">💡 Hướng dẫn: Cuộn sao cho toàn bộ bảng lọt vào màn hình, dùng công cụ chụp ảnh màn hình cắt phần viền xám để gửi nhóm.</div>
         <div class="poster-wrapper mx-auto" style="max-width: 1100px;">
             <div class="text-center mb-5">
                 <h1 class="fw-bold mb-2" style="color: var(--n-blue); font-size: 4rem;">☧</h1>
@@ -145,28 +131,25 @@
 </div>
 
 <script>
-    // ⚠️ ĐẶT MẬT KHẨU BẢO VỆ Ở ĐÂY
     const ADMIN_PASS = "GiupLe";
 
     // ⚠️ DÁN LINK WEB APP CỦA BẠN VÀO ĐÂY
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxjDBfDB3RSGNjFlhRyJSzKZvtcu-LGia3r3Nz9FR6TWCucv582-JdHPtKcNs_oVK-i/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyvkqT1Ll8iY3uRdwsWwDzA4bNnROwifygKwkNlboGWbFCE8Nitl6ysg9tq9eBWENv-/exec";
     
     let systemData = [];
     let officialData = []; 
     let selectedUserId = "";
 
-    // Lắng nghe sự kiện Enter ở màn hình Login
     document.getElementById("adminPassInput").addEventListener("keypress", function(event) {
         if (event.key === "Enter") { event.preventDefault(); checkAdminLogin(); }
     });
 
-    // Hàm kiểm tra mật khẩu Admin
     function checkAdminLogin() {
         const input = document.getElementById("adminPassInput").value;
         if(input === ADMIN_PASS) {
             document.getElementById("adminLoginBox").classList.add("d-none");
             document.getElementById("adminMainBox").classList.remove("d-none");
-            initAdmin(); // Chỉ tải dữ liệu khi pass đúng
+            initAdmin(); 
         } else {
             alert("❌ SAI MẬT KHẨU! Vui lòng thử lại.");
             document.getElementById("adminPassInput").value = "";
@@ -255,17 +238,27 @@
         days.forEach(d => {
             const shifts = (d === "Chúa Nhật") ? ["5g", "7g", "16g", "17g30"] : ["Sáng", "Chiều"];
             let html = `<div class="col-md-6 col-lg-4"><div class="brutal-card p-0 h-100 d-flex flex-column" style="border-color: #00796b;"><div class="day-title-box m-0" style="background: #00796b;">${d}</div><div class="px-3 pb-3 pt-3 flex-grow-1">`;
+            
             shifts.forEach(s => {
                 let enrolledUsers = officialData.filter(item => item.day === d && item.shift === s);
                 const safeId = "input-" + d.replace(/\s+/g, '') + "-" + s.replace(/\s+/g, '');
                 
                 html += `<div class="shift-block" style="border-color: #00796b;"><div class="shift-header text-dark"><span>${s}</span><span class="badge bg-dark border border-dark border-1 fs-6" style="border-radius: var(--radius-sm)">${enrolledUsers.length}</span></div><div>`;
-                if(enrolledUsers.length === 0) { html += `<div class="text-muted fw-bold mb-2" style="font-size: 0.9rem;">-- Trống --</div>`; } 
-                else { enrolledUsers.forEach(u => { html += `<div class="name-tag d-inline-block" style="background: var(--n-white);">${u.name} <button class="remove-btn" onclick="removeFromOfficial('${d}', '${s}', '${u.name}')" title="Xóa em này">X</button></div>`; }); }
-                html += `</div><div class="edit-tool-box mt-3 p-2"><input list="list-${safeId}" id="${safeId}" class="brutal-search w-100 mb-2 p-2" placeholder="🔍 Nhập tên..." autocomplete="off" style="text-align:left;">
+                if(enrolledUsers.length === 0) {
+                    html += `<div class="text-muted fw-bold mb-2" style="font-size: 0.9rem;">-- Trống --</div>`;
+                } else {
+                    enrolledUsers.forEach(u => {
+                        html += `<div class="name-tag d-inline-block" style="background: var(--n-white);">${u.name} <button class="remove-btn" onclick="removeFromOfficial('${d}', '${s}', '${u.name}')" title="Xóa em này">X</button></div>`;
+                    });
+                }
+                
+                html += `   </div>
+                            <div class="edit-tool-box mt-3 p-2">
+                                <input list="list-${safeId}" id="${safeId}" class="brutal-search w-100 mb-2 p-2" placeholder="🔍 Nhập tên..." autocomplete="off" style="text-align:left;">
                                 <datalist id="list-${safeId}">${systemData.map(u => `<option value="${u.name}">`).join('')}</datalist>
                                 <button class="brutal-btn w-100" style="padding: 6px; font-size: 0.9rem;" onclick="addToOfficial('${d}', '${s}', '${safeId}')">➕ THÊM CA ${s.toUpperCase()}</button>
-                            </div></div>`;
+                            </div>
+                         </div>`;
             });
             html += `</div></div></div>`;
             area.innerHTML += html;
@@ -333,27 +326,36 @@
         const user = systemData.find(u => u.id === id);
         if(!user) return;
         selectedUserId = user.id;
+
         document.getElementById('emptyStateArea').style.display = 'none';
         document.getElementById('userDetailsArea').style.display = 'block';
         document.getElementById('detailName').innerText = user.name;
         document.getElementById('detailId').innerText = user.id.toUpperCase();
 
         const shiftsArea = document.getElementById('detailRegisteredShifts');
-        if (!user.registrations || user.registrations.length === 0) { shiftsArea.innerHTML = '<h6 class="text-danger fw-bold">Chưa đăng ký ca nào!</h6>'; } 
-        else { shiftsArea.innerHTML = user.registrations.map(reg => `<span class="name-tag" style="background: var(--n-white); font-size: 1.15rem;">${reg.day} - ${reg.shift}</span>`).join(''); }
+        if (!user.registrations || user.registrations.length === 0) {
+            shiftsArea.innerHTML = '<h6 class="text-danger fw-bold">Chưa đăng ký ca nào!</h6>';
+        } else {
+            shiftsArea.innerHTML = user.registrations.map(reg => `<span class="name-tag" style="background: var(--n-white); font-size: 1.15rem;">${reg.day} - ${reg.shift}</span>`).join('');
+        }
         
         document.getElementById('adminScoreThuong').innerText = user.thuongPhat.thuong;
         document.getElementById('adminScorePhat').innerText = user.thuongPhat.phat;
         document.getElementById('adminScoreBu').innerText = user.thuongPhat.bu;
         
         const historyArea = document.getElementById('adminHistoryLog');
-        if(user.thuongPhat.history.length === 0){ historyArea.innerHTML = '<div class="text-muted fw-bold">Chưa có ghi nhận thưởng/phạt nào.</div>'; } 
-        else {
-            historyArea.innerHTML = user.thuongPhat.history.map(item => {
+        if(user.thuongPhat.history.length === 0){
+            historyArea.innerHTML = '<div class="text-muted fw-bold">Chưa có ghi nhận thưởng/phạt nào.</div>';
+        } else {
+            historyArea.innerHTML = user.thuongPhat.history.map((item, index) => {
                 let color = item.type === 'Thưởng' ? 'text-success' : (item.type === 'Phạt' ? 'text-danger' : 'text-primary');
+                // SỬ DỤNG SỐ INDEX LÀM THAM SỐ ĐỂ TRÁNH LỖI HTML DẤU NHÁY CỦA GHI CHÚ
                 return `<div class="p-2 border-bottom border-dark border-1 mb-1 d-flex justify-content-between align-items-center" style="background: white; border-radius: 4px;">
-                            <div><strong class="${color} text-uppercase">${item.type}</strong> - <small class="text-muted fw-bold">${item.date}</small><br>Lý do: ${item.note || '...'}</div>
-                            <button class="remove-btn" onclick="deleteHistory(${item.rowIndex || 'null'}, '${item.timestamp || ''}')" title="Xóa lệnh này">X</button>
+                            <div>
+                                <strong class="${color} text-uppercase">${item.type}</strong> - <small class="text-muted fw-bold">${item.date}</small><br>
+                                Lý do: ${item.note || '...'}
+                            </div>
+                            <button class="remove-btn" onclick="xoaThanhTich('${user.id}', ${index})" title="Xóa lệnh này">X</button>
                         </div>`;
             }).join('');
         }
@@ -366,43 +368,56 @@
         if(!note) return alert("BẮT BUỘC: Nhập ghi chú lý do " + type.toLowerCase() + "!");
         
         const user = systemData.find(u => u.id === selectedUserId);
-        const tempTimestamp = new Date().getTime().toString();
         const dateStr = new Date().toLocaleDateString('vi-VN');
         
         if (type === 'Thưởng') user.thuongPhat.thuong += points;
         if (type === 'Phạt') user.thuongPhat.phat += points;
         if (type === 'Bù') user.thuongPhat.bu += points;
         
-        user.thuongPhat.history.unshift({ rowIndex: null, timestamp: tempTimestamp, date: dateStr, type: type, note: note });
+        user.thuongPhat.history.unshift({ date: dateStr, type: type, note: note, points: points });
         if (user.thuongPhat.history.length > 15) user.thuongPhat.history.pop();
         
         document.getElementById('actionNote').value = "";
-        viewUserDetails(selectedUserId);
+        viewUserDetails(selectedUserId); 
         
-        try { fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "addThuongPhat", id: selectedUserId, type: type, points: points, note: note }) }); } catch(e) {}
+        try {
+            fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "addThuongPhat", id: selectedUserId, type: type, points: points, note: note }) });
+        } catch(e) {}
     }
 
-    async function deleteHistory(rowIndex, timestamp) {
-        if(!confirm("Xóa lịch sử này sẽ cập nhật lại điểm hiện tại. Tiếp tục?")) return;
-        const user = systemData.find(u => u.id === selectedUserId);
-        const recordIndex = user.thuongPhat.history.findIndex(h => (rowIndex && h.rowIndex === rowIndex) || (timestamp && h.timestamp === String(timestamp)));
+    window.xoaThanhTich = async function(uId, index) {
+        let confirmAction = confirm("XÁC NHẬN XÓA LỊCH SỬ NÀY? Hệ thống sẽ thu hồi điểm trên máy chủ.");
+        if (!confirmAction) return;
+
+        const user = systemData.find(u => u.id === uId);
+        if(!user) return;
+        const record = user.thuongPhat.history[index];
+        if(!record) return;
         
-        if (recordIndex > -1) {
-            const record = user.thuongPhat.history[recordIndex];
-            if (record.type === 'Thưởng' && user.thuongPhat.thuong > 0) user.thuongPhat.thuong -= 1;
-            if (record.type === 'Phạt' && user.thuongPhat.phat > 0) user.thuongPhat.phat -= 1;
-            if (record.type === 'Bù' && user.thuongPhat.bu > 0) user.thuongPhat.bu -= 1;
-            user.thuongPhat.history.splice(recordIndex, 1);
-        }
+        if (record.type === 'Thưởng' && user.thuongPhat.thuong > 0) user.thuongPhat.thuong -= 1;
+        if (record.type === 'Phạt' && user.thuongPhat.phat > 0) user.thuongPhat.phat -= 1;
+        if (record.type === 'Bù' && user.thuongPhat.bu > 0) user.thuongPhat.bu -= 1;
         
-        viewUserDetails(selectedUserId); 
-        try { fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "deleteThuongPhat", id: selectedUserId, rowIndex: rowIndex, timestamp: timestamp }) }); } catch(e) {}
+        // Tạm xóa trên UI
+        user.thuongPhat.history.splice(index, 1);
+        viewUserDetails(uId); 
+        
+        // Bắn API đẩy nguyên Cụm thông tin xuống nhờ Server lọc & xóa
+        try {
+            fetch(WEB_APP_URL, { 
+                method: "POST", mode: "no-cors", 
+                body: JSON.stringify({ action: "deleteThuongPhatExact", id: uId, type: record.type, points: record.points, note: record.note }) 
+            });
+        } catch(e) {}
     }
 
     async function runScheduler() {
         if(!confirm("XÁC NHẬN CHẠY LẠI THUẬT TOÁN CHIA LỊCH? Lịch Chính Thức hiện tại sẽ bị ghi đè!")) return;
         showLoader(true);
-        try { await fetch(`${WEB_APP_URL}?action=runPhanBo`); setTimeout(() => { location.reload(); }, 1000); } catch (error) { alert("Có lỗi khi chạy chia lịch!"); showLoader(false); } 
+        try {
+            await fetch(`${WEB_APP_URL}?action=runPhanBo`);
+            setTimeout(() => { location.reload(); }, 1000);
+        } catch (error) { alert("Có lỗi khi chạy chia lịch!"); showLoader(false); } 
     }
 </script>
 </body>
